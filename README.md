@@ -10,7 +10,7 @@
 
 <hr></hr><br></br>
 
-<h1 align="center">1ª Etapa</h1><br></br>
+<h1 align="center">1ª Etapa: Tratamento de Dados</h1><br></br>
 
 <h3 align="center">1ª Entrega</h3>
 
@@ -56,7 +56,7 @@ Dessa forma, seria possível reconhecer os dias da semana de acordo com o númer
 
 <br></br>
 
-<h1 align="center">2ª Etapa</h1>
+<h1 align="center">2ª Etapa: Visualização</h1>
 
  <h3 align="center">[Dashboard no Looker Studio](https://lookerstudio.google.com/u/0/reporting/b028e423-55ea-4cb3-ac9d-f23a5f9b46d5/page/0oUsD)</h3>
 
