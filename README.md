@@ -61,7 +61,7 @@ Dessa forma, seria possível reconhecer os dias da semana de acordo com o númer
  <h3 align="center">[Dashboard no Looker Studio](https://lookerstudio.google.com/u/0/reporting/b028e423-55ea-4cb3-ac9d-f23a5f9b46d5/page/0oUsD)</h3>
 
 > [!NOTE]
-> Como não sabia sobre o direito autoral da logo ou do nome da Stone, resolvi deixar o dashboard sem imagens ou rferências gráficas relacionadas. Mantive apenas a identidade visual.
+> Como não sabia sobre o direito autoral da logo ou do nome da Stone, resolvi deixar o dashboard sem imagens ou referências gráficas relacionadas à empresa. Mantive apenas a identidade visual de cores.
 
 <br></br>
 
