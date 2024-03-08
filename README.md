@@ -65,8 +65,21 @@ Dessa forma, seria possível reconhecer os dias da semana de acordo com o númer
 
 <br></br>
 
-A dashboard possui o objetivo de mostrar as médias das metas de acordo com os dias da semana, destacando o dia com maior a média geral. Dessa forma, seria possível gerar uma investigação dos dias com médias mais baixas e entender a causa.
+- Inicialmente, foi pensado em 5 filtros para obter diferentes visões dos dados:
+1) Filtro de Agente: é a maior razão da dashboard. Possui a visão dos dados de acordo com o agente durante todo o mês de Janeiro.
+2) Filtro de Líder: visualização dos agentes abaixo do líder. É possível ver o desempenho da equipe do líder
+3) Filtro de nível: nesse filtro é possível medir e observar as variações de metas e vendas de acordo com cada nível dos agentes
+4) Filtro de Dia: o filtro pode ser utilizado para investigar dias específicos da semana e ter possíveis insights de vendas ou metas. Esse provavelmente pode ser utilizado após alguma investigação anteriorsobre o desempenho semanal e/ou após algum problema ocorrido e informado.
+5) Filtro de Data: esse filtro é o controle de calendário. Nele é possível limitar dias e intervalos de data. Uma vez que há muita presença de datas nas informações, é um filtro importante para observar valores em intervalos diferentes de tempo.
 
-Além disso, também há um gráfico de série temporal, descrevendo as métas ao longo do mês de janeiro, sendo possível acompanhar as metas de um agente ao longo do tempo e possíveis cíclos de quedas ou aumentos de rendimento.
+<br></br>
+
+- A dashboard está dividido em 3 sessões:
+
+1ª sessão: Possui o objetivo de mostrar as médias das metas de acordo com os dias da semana, destacando valores como maior meta geral e média da meta no período informado. Dessa forma, seria possível gerar uma investigação dos dias da semana com médias mais baixas e entender as possíveis causas, além de acompanhar a máxima e mínima geral ou individual para elogios ou melhorias.
+
+2ª sessão: É formada por uma tabela detalhando as metas, vendas e porcentagem da meta atingida, sendo ela calculada como `venda/meta`. O objetivo é acompanhar mais detalhadamente o desempenho de cada agente durante os dias do mÊs de Janeiro de 2077.
+
+3ª sessao: Há um gráfico de série temporal, descrevendo as metas e as vendas ao longo do mês de janeiro. Dessa forma, é possível acompanhar as metas e vendas de um agente ao longo do tempo e possíveis cíclos de quedas ou aumentos de rendimento.
 
 
