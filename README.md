@@ -11,42 +11,44 @@
 
 <hr></hr><br>
 
-<h2>Primeiramente, é necessário possuir uma conta no site Kaggle</h2>
+<h2>Seguindo o passo a passo:</h2>
 
-• Acesse [www.kaggle.com](https://www.kaggle.com/)<br></br>
-• Crie uma conta clicando em "Register" no canto superior direito, conforme a imagem abaixo:<br></br>
-![Registro no Kaggle](https://github.com/fsbettecher/world_population/assets/62480910/72e77922-67f0-4bf3-88eb-54dedd943ddb)<br>
+1) Os arquivos foram baixados e utilizados como base utilizando o código abaixo:
+```
+dim_agents = pd.read_csv('dim_agents.csv')
+```
+```
+dim_leaders = pd.read_csv('dim_leaders.csv')
+```
+```
+fact_leads = pd.read_csv('fact_leads.csv')
+```
+```
+fact_sales = pd.read_csv('fact_sales.csv')
+```
+
+2) Após a coleta dos bancos de dados, algumas colunas que não seriam usadas foram retiradas dos DataFrames
+e as linhas duplicadas foram removidas.<br></br>
+
+3) Como o índice das bases de dados vieram sem nome no arquivo, as colunas de índice foram removidas e um
+novo indice foi criado automaticamente.
+
+4) Como primeira análise, foi utilizado a função ```np.select``` para definir os pesos de acordo com cada nível do agente.
+
+5) Após definir os pesos, a mesma função foi utilizada para calcular as metas de acordo com o tipo de canal utilizado pelo agente.
+
+6) Na parte intermediária do código, as tabelas de vendas, leads e informações de metas foram unificadas para dar continuidade ao tratamento de dados
+
+7) Nesse passo, a coluna de folgas (1 e 2) foram padronizadas para o modelo do Python, onde 0 representa Segunda-feira e 6 representa Domingo.
+Dessa forma, seria possível reconhecer os dias da semana de acordo com o número das colunas ```folga_1``` e ```folga_2``` e a coluna ```Date```.
+
+8) Após definir os dias da semana, nesse passo foram feitas as isenções dos dias trabalhados. Considerando a coluna meta = 0 e a coluna trabalha = False
+
+9) Finalizando o tratamento dos dados, os dias da semana foram alterados de números [0 ~ 6] para nomes [Segunda-feira ~ Domingo]
+
+10) Por fim, as colunas foram reordenadas e selecionadas e o arquivo foi exportado no formato ```.csv```. A partir desse ponto,
+as informações foram levadas ao Looker Studio fazendo o upload do arquivo no formato csv.
+
+• Dashboard no Looker Studio<br></br>
+![Dashboard no Looker Studio](https://lookerstudio.google.com/u/0/reporting/b028e423-55ea-4cb3-ac9d-f23a5f9b46d5/page/0oUsD/edit)
 <br></br>
-
-• Após criar a conta, será necessário criar um token para acessar os datasets via API<br></br>
-![Baixando o Token](https://github.com/fsbettecher/world_population/assets/62480910/5e49ab5f-ce7d-49f5-ac82-95a2db4dba08)
-<br></br>
-
-• Seguindo os passos acima, será feito o download do token no formato json para o seu computador.
-
-• Em seguida, abra o Git Bash e execute as linhas de comando abaixo:
-
-```
-cd C:/users/nome_do_usuario
-```
-
->Altere "<strong>nome_do_usuario</strong>" para o nome que está registrado em seu computador
-<br>
-
-```
-mkdir .kaggle
-```
-```
-cd .kaggle
-```
-```
-cp diretorio/onde/está/o/arquivo/kaggle.json .
-```
->Essa última linha deve conter o final "<strong>/kaggle.json</strong>" no endereço, para que seja feita uma cópia do arquivo correto na pasta atual representada por "."
->
->Por exemplo: no meu computador o comando seria `cp D:/Downloads/kaggle.json .`
-<br>
-
-• Dessa forma, o arquivo token baixado será copiado para a pasta .kaggle criada na pasta do usuário. Essa etapa é importante para a autenticação da API no código e não deve ser pulada.
-
-<h2>🎉 Pronto! Agora seu computador está configurado e pronto para rodar o código e utilizar a API do Kaggle! 🎉</h2>
