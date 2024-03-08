@@ -49,6 +49,5 @@ Dessa forma, seria possível reconhecer os dias da semana de acordo com o númer
 10) Por fim, as colunas foram reordenadas e selecionadas e o arquivo foi exportado no formato ```.csv```. A partir desse ponto,
 as informações foram levadas ao Looker Studio fazendo o upload do arquivo no formato csv.
 
-• Dashboard no Looker Studio<br></br>
-![Dashboard no Looker Studio](https://lookerstudio.google.com/u/0/reporting/b028e423-55ea-4cb3-ac9d-f23a5f9b46d5/page/0oUsD/edit)
+🟢🟢🟢<h2 align="center">[Dashboard no Looker Studio](https://lookerstudio.google.com/u/0/reporting/b028e423-55ea-4cb3-ac9d-f23a5f9b46d5/page/0oUsD/edit)</h2>
 <br></br>
