@@ -1,7 +1,7 @@
 # Importando as bibliotecas utilizadas
 import pandas as pd
 import numpy as np
-from datetime import timedelta
+import datetime
 
 
 # Lendo os arquivos do case
@@ -9,18 +9,6 @@ dim_agents = pd.read_csv('dim_agents.csv')
 dim_leaders = pd.read_csv('dim_leaders.csv')
 fact_leads = pd.read_csv('fact_leads.csv')
 fact_sales = pd.read_csv('fact_sales.csv')
-
-"""
-Segundo o case, as colunas lead_id e sale_id não são obrigatórias.
-Por isso, nesse caso, irei remover as colunas e linhas duplicadas,
-para diminuir o volume de dados
-"""
-
-fact_leads.drop('lead_id', axis=1, inplace=True)
-fact_sales.drop('sale_id', axis=1, inplace=True)
-
-fact_leads.drop_duplicates(['Agent_ID', 'Date'], inplace=True)
-fact_sales.drop_duplicates(['Agent_ID', 'Date'], inplace=True)
 
 """
 Considerando a coluna com nome vazio como o índice da tabela,
@@ -34,7 +22,39 @@ dim_leaders.drop('Unnamed: 0', axis=1, inplace=True)
 fact_leads.drop('Unnamed: 0', axis=1, inplace=True)
 fact_sales.drop('Unnamed: 0', axis=1, inplace=True)
 
+# Criando uma lista dos dias do mês de Janeiro de 2077
+primeiro_dia = datetime.date(2077, 1, 1)
+ultimo_dia = datetime.date(2077, 1, 31)
+
+delta_time = ultimo_dia - primeiro_dia
+
+dias = []
+for i in range(delta_time.days + 1):
+    day = primeiro_dia + datetime.timedelta(days=i)
+    dias.append(day)
+
+lista_dias_str = [datetime.datetime.strftime(dt, format="%Y-%m-%d") for dt in dias]
+
+# Criando uma lista dos Agent_ID unicos
+lista_agent_id = list(dim_agents['Agent_ID'].unique())
+
+# Obtendo as dimensões de cada lista
+len_dias = len(lista_dias_str)
+len_agent_id = len(lista_agent_id)
+
+# Multiplicando as listas para atingirem a mesma dimensão
+lista_dias_str = lista_dias_str * len_agent_id
+lista_agent_id = lista_agent_id * len_dias
+
+# Criando o DataFrame com as duas listas
+df_dias = pd.DataFrame({'Agent_ID': lista_agent_id, 'Date': lista_dias_str})
+df_dias.sort_values(['Agent_ID', 'Date'], inplace=True)
+
+# Unindo o DataFrame criado com o dim_agents
+dim_agents = df_dias.merge(dim_agents, on='Agent_ID', how='left')
+
 # Atribuindo valores dos fatores de acordo com o nível de cada agente
+
 condicao_fator = [
     dim_agents['nivel'] == 1,
     dim_agents['nivel'] == 2,
@@ -68,20 +88,11 @@ valor_meta = [
 
 dim_agents['meta'] = np.select(condicao_meta, valor_meta, default=np.nan)
 
-# Unindo as tabelas de lead e sales de acordo com Agent_ID e data da ocorrência
-lead_venda = pd.merge(fact_leads, fact_sales, on=['Agent_ID', 'Date'], how='outer')
-
-# Unindo os dados de metas ao lead_venda
-df_metas = lead_venda.merge(dim_agents, on='Agent_ID', how='left')
-
-# Removendo colunas que não serão necessárias no processo
-df_metas.drop(['canal', 'funcao', 'fator'], axis=1, inplace=True)
-
 # Transformando a coluna de data em datetime
-df_metas['Date'] = pd.to_datetime(df_metas['Date'])
+dim_agents['Date'] = pd.to_datetime(dim_agents['Date'])
 
 # Para início de informações, considero a coluna trabalha = True
-df_metas['trabalha'] = True
+dim_agents['trabalha'] = True
 
 """
 Como não havia referência dos dias da semana no case, resolvi
@@ -89,60 +100,96 @@ ajustar os dias de acordo com o modelo do python [0-6], onde
 0 = Segunda-feira e 6 = Domingo
 """
 
-df_metas['folga_1'] -=  1
-df_metas['folga_2'] -= 1
+dim_agents['folga_1'] -=  1
+dim_agents['folga_2'] -= 1
 
 # Criando as colunas dos dias da semana
-df_metas['dias_semana'] = [i.weekday() if i != '' else i for i in df_metas['Date']]
+dim_agents['dias_semana'] = [i.weekday() if i != '' else i for i in dim_agents['Date']]
 
 # Definindo a data do primeiro domingo do mês
 primeiro_domingo = pd.to_datetime('2077-01-03')
 
 # Definindo metas zeradas e trabalha = False para os dias de folga ou 4º
-df_metas['meta'] = np.where(
-    (df_metas['dias_semana'] == df_metas['folga_1']) |
-    (df_metas['dias_semana'] == df_metas['folga_2']) |
-    (df_metas['Date'] == primeiro_domingo + timedelta(21)),
+dim_agents['meta'] = np.where(
+    (dim_agents['dias_semana'] == dim_agents['folga_1']) |
+    (dim_agents['dias_semana'] == dim_agents['folga_2']) |
+    (dim_agents['Date'] == primeiro_domingo + datetime.timedelta(21)),
     0,
-    df_metas['meta']
+    dim_agents['meta']
     )
 
-df_metas['trabalha'] = np.where(
-    (df_metas['dias_semana'] == df_metas['folga_1']) |
-    (df_metas['dias_semana'] == df_metas['folga_2']) |
-    (df_metas['Date'] == primeiro_domingo + timedelta(21)),
+dim_agents['trabalha'] = np.where(
+    (dim_agents['dias_semana'] == dim_agents['folga_1']) |
+    (dim_agents['dias_semana'] == dim_agents['folga_2']) |
+    (dim_agents['Date'] == primeiro_domingo + datetime.timedelta(21)),
     False,
-    df_metas['trabalha']
+    dim_agents['trabalha']
     )
 
 # Transformando dias da semana em nomes
 dias_semana = [
-    df_metas['dias_semana'] == 0,
-    df_metas['dias_semana'] == 1,
-    df_metas['dias_semana'] == 2,
-    df_metas['dias_semana'] == 3,
-    df_metas['dias_semana'] == 4,
-    df_metas['dias_semana'] == 5,
-    df_metas['dias_semana'] == 6
+    dim_agents['dias_semana'] == 0,
+    dim_agents['dias_semana'] == 1,
+    dim_agents['dias_semana'] == 2,
+    dim_agents['dias_semana'] == 3,
+    dim_agents['dias_semana'] == 4,
+    dim_agents['dias_semana'] == 5,
+    dim_agents['dias_semana'] == 6
 ]
 
 nomes_dias = [
     'Segunda-feira',
     'Terça-feira',
     'Quarta-feira',
-    'Quinta-Feira',
+    'Quinta-feira',
     'Sexta-feira',
     'Sábado',
     'Domingo'
 ]
 
-df_metas['dias_semana'] = np.select (dias_semana, nomes_dias)
+dim_agents['dias_semana'] = np.select (dias_semana, nomes_dias)
 
 # Ordenando e removendo colunas
-df_metas = df_metas[[
+dim_agents = dim_agents[[
     'lider', 'Agent_ID', 'nivel', 'Date', 'dias_semana',
     'meta', 'trabalha'
 ]]
 
-# Salvando o arquivo em formato csv
-df_metas.to_csv('metas_calculadas_janeiro_2077.csv', index=False)
+# Conclusão do Passo 1:
+# Exportando a primeira tabela
+dim_agents.to_csv('metas_janeiro_2077.csv')
+
+
+# Passo 2:
+# contando a quantidade de leads e sales por agente, por dia
+count_leads = fact_leads.groupby(['Agent_ID', 'Date'])['lead_id'].count()
+count_sales = fact_sales.groupby(['Agent_ID', 'Date'])['sale_id'].count()
+
+# Transformando os dados em DataFrames
+count_leads = pd.DataFrame(count_leads).reset_index()
+count_sales = pd.DataFrame(count_sales).reset_index()
+
+# Alterando a coluna Date para datetime
+count_leads['Date'] = pd.to_datetime(count_leads['Date'])
+count_sales['Date'] = pd.to_datetime(count_sales['Date'])
+
+# Unindo as informações em um único DataFrame
+leads_sales = count_leads.merge(count_sales, on=['Agent_ID', 'Date'], how='outer')
+leads_sales = dim_agents.merge(leads_sales, on=['Agent_ID', 'Date'], how='left')
+
+# Transformando valores nulos em 0 para o cálculo da % de metas alcançadas
+leads_sales['lead_id'].fillna(0, inplace=True)
+leads_sales['sale_id'].fillna(0, inplace=True)
+
+# Tratando valores de vendas em que não houve trabalho
+leads_sales['sale_id'] = np.where(
+    leads_sales['trabalha'] == False,
+    0,
+    leads_sales['sale_id']
+    )
+
+leads_sales['%_meta_ancancada'] = leads_sales['sale_id'] / leads_sales['meta']
+
+# Conclusão do Passo 2:
+# Exportando a segunda tabela
+leads_sales.to_csv('leads_sales_janeiro_2077.csv', index=False)
