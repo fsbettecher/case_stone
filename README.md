@@ -82,4 +82,15 @@ Dessa forma, seria possível reconhecer os dias da semana de acordo com o númer
 
 3ª sessao: Há um gráfico de série temporal, descrevendo as metas e as vendas ao longo do mês de janeiro. Dessa forma, é possível acompanhar as metas e vendas de um agente ao longo do tempo e possíveis cíclos de quedas ou aumentos de rendimento.
 
+<br></br>
 
+<h1 align="center">Etapa Bonus: Automação</h1>
+
+> [!NOTE]
+> Na etapa bônus, eu fiz conforme o que considero aceitável no dia a dia, considerando custos e facilidade na execução do fluxograma.
+> 
+> No passo 4, por exemplo, considerando apenas uma resposta definitiva, creio que uma **Base de Dados** seria a melhor opção para exportação de dados e conexão com o Looker Studio.
+
+<p align="center">
+<img loading="lazy" src="https://i.imgur.com/QYDTYJT.png"/>
+</p>
