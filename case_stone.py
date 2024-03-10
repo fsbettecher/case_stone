@@ -3,18 +3,18 @@ import pandas as pd
 import numpy as np
 import datetime
 
-
 # Lendo os arquivos do case
 dim_agents = pd.read_csv('dim_agents.csv')
 dim_leaders = pd.read_csv('dim_leaders.csv')
 fact_leads = pd.read_csv('fact_leads.csv')
 fact_sales = pd.read_csv('fact_sales.csv')
 
+
 """
 Considerando a coluna com nome vazio como o índice da tabela,
 vou retirá-la das colunas e manter somente o índice gerado
-ao transformar o arquivo em DataFrame
-para manter os dados mais limpos
+ao transformar o arquivo em DataFrame para manter os dados
+mais limpos
 """
 
 dim_agents.drop('Unnamed: 0', axis=1, inplace=True)
@@ -35,7 +35,7 @@ for i in range(delta_time.days + 1):
 
 lista_dias_str = [datetime.datetime.strftime(dt, format="%Y-%m-%d") for dt in dias]
 
-# Criando uma lista dos Agent_ID unicos
+# Criando uma lista dos Agent_ID únicos
 lista_agent_id = list(dim_agents['Agent_ID'].unique())
 
 # Obtendo as dimensões de cada lista
@@ -169,7 +169,11 @@ count_sales = fact_sales.groupby(['Agent_ID', 'Date'])['sale_id'].count()
 count_leads = pd.DataFrame(count_leads).reset_index()
 count_sales = pd.DataFrame(count_sales).reset_index()
 
-# Alterando a coluna Date para datetime
+# Renomeando as colunas de contagem
+count_leads.rename(columns={'lead_id': 'count_leads'}, inplace=True)
+count_sales.rename(columns={'sale_id': 'count_sales'}, inplace=True)
+
+# Transformando a coluna Date para datetime
 count_leads['Date'] = pd.to_datetime(count_leads['Date'])
 count_sales['Date'] = pd.to_datetime(count_sales['Date'])
 
@@ -178,17 +182,17 @@ leads_sales = count_leads.merge(count_sales, on=['Agent_ID', 'Date'], how='outer
 leads_sales = dim_agents.merge(leads_sales, on=['Agent_ID', 'Date'], how='left')
 
 # Transformando valores nulos em 0 para o cálculo da % de metas alcançadas
-leads_sales['lead_id'].fillna(0, inplace=True)
-leads_sales['sale_id'].fillna(0, inplace=True)
+leads_sales['count_leads'].fillna(0, inplace=True)
+leads_sales['count_sales'].fillna(0, inplace=True)
 
 # Tratando valores de vendas em que não houve trabalho
-leads_sales['sale_id'] = np.where(
+leads_sales['count_sales'] = np.where(
     leads_sales['trabalha'] == False,
     0,
-    leads_sales['sale_id']
+    leads_sales['count_sales']
     )
 
-leads_sales['%_meta_ancancada'] = leads_sales['sale_id'] / leads_sales['meta']
+leads_sales['%_meta_ancancada'] = leads_sales['count_sales'] / leads_sales['meta']
 
 # Conclusão do Passo 2:
 # Exportando a segunda tabela
