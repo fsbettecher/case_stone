@@ -1,4 +1,4 @@
-lider,Agent_ID,nivel,Date,dias_semana,meta,trabalha,lead_id,sale_id,%_meta_ancancada
+lider,Agent_ID,nivel,Date,dias_semana,meta,trabalha,count_leads,count_sales,%_meta_ancancada
 39,1,5,2077-01-01,Sexta-feira,4.8100000000000005,True,24.0,5.0,1.0395010395010393
 39,1,5,2077-01-02,Sábado,4.8100000000000005,True,0.0,0.0,0.0
 39,1,5,2077-01-03,Domingo,0.0,False,25.0,0.0,
